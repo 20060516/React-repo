@@ -5,11 +5,11 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [roleNames, setRoleNames] = useState(["ROLE_USER"]);
+  const [userName, setUserName] = useState("");
+  const [roleName, setRoleName] = useState(["ROLE_USER"]);
 
   const handleRoleChange = (role) => {
-    setRoleNames((prev) =>
+    setRoleName((prev) =>
       prev.includes(role)
         ? prev.filter((r) => r !== role)
         : [...prev, role]
@@ -18,19 +18,27 @@ const Signup = () => {
 
   const addNewEmployee = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post("https://springboot-mlyo.onrender.com/api/auth/register", {
-        name,
-        email,
-        password,
-        username,
-        roleNames,
-      });
 
+    const payload = {
+      name,
+      email,
+      password,
+      userName,  
+      roleName,
+    };
+
+    try {
+      const response = await axios.post("http://localhost:8080/api/auth/register", payload);
+      console.log("Registration Success:", response.data);
       alert("Registered successfully!");
+      setName("");
+      setEmail("");
+      setPassword("");
+      setUserName("");
+      setRoleName(["ROLE_USER"]);
     } catch (err) {
-      alert("Registration failed.");
-      console.error(err);
+      console.error("Registration Error:", err.response?.data || err.message);
+      alert("Registration failed. Check console for more info.");
     }
   };
 
@@ -41,7 +49,7 @@ const Signup = () => {
 
         <input
           type="text"
-          placeholder="Name"
+          placeholder="Full Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -60,8 +68,8 @@ const Signup = () => {
         <input
           type="text"
           placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
           required
           style={styles.input}
         />
@@ -80,7 +88,7 @@ const Signup = () => {
           <label style={styles.checkboxLabel}>
             <input
               type="checkbox"
-              checked={roleNames.includes("ROLE_USER")}
+              checked={roleName.includes("ROLE_USER")}
               onChange={() => handleRoleChange("ROLE_USER")}
             />
             ROLE_USER
@@ -89,7 +97,7 @@ const Signup = () => {
           <label style={styles.checkboxLabel}>
             <input
               type="checkbox"
-              checked={roleNames.includes("ROLE_ADMIN")}
+              checked={roleName.includes("ROLE_ADMIN")}
               onChange={() => handleRoleChange("ROLE_ADMIN")}
             />
             ROLE_ADMIN
@@ -107,28 +115,29 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    minHeight: "70vh", 
-    backgroundColor: "#f7f7f7",
+    minHeight: "80vh",
+    backgroundColor: "#f5f5f5",
   },
   form: {
-    backgroundColor: "white",
+    backgroundColor: "#fff",
     padding: "20px",
     borderRadius: "8px",
     width: "100%",
-    maxWidth: "340px",
-    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+    maxWidth: "400px",
+    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
     display: "flex",
     flexDirection: "column",
-    gap: "10px",
+    gap: "12px",
   },
   title: {
     textAlign: "center",
-    marginBottom: "8px",
+    marginBottom: "10px",
+    color: "#333",
   },
   input: {
-    padding: "8px",
+    padding: "10px",
     fontSize: "14px",
-    borderRadius: "4px",
+    borderRadius: "5px",
     border: "1px solid #ccc",
   },
   roleLabel: {
@@ -137,7 +146,7 @@ const styles = {
   },
   roleRow: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     marginBottom: "10px",
   },
   checkboxLabel: {
@@ -145,7 +154,7 @@ const styles = {
   },
   button: {
     padding: "10px",
-    backgroundColor: "#4caf50",
+    backgroundColor: "#007bff",
     color: "white",
     border: "none",
     borderRadius: "5px",

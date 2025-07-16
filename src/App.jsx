@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Signup from "./components/Signup";
 import Register from "./components/Register";
 import Login from "./components/Login";
+import AddEmployee from "./components/AddEmployee";
+import ViewEmployees from "./components/ViewEmployees";
 
 const Navbar = () => {
   return (
@@ -11,41 +13,31 @@ const Navbar = () => {
         <h2>Employee Management System</h2>
       </div>
       <div style={styles.navRight}>
-        <Link to="/register" style={styles.navButton}>Register</Link>
+        <Link to="/add-employee" style={styles.navButton}>Add Employee</Link>
+        <Link to="/employees" style={styles.navButton}>View Employees</Link>
         <Link to="/login" style={styles.navButton}>Login</Link>
+        <Link to="/register" style={styles.navButton}>Register</Link>
       </div>
     </nav>
   );
 };
 
-const Header = () => (
-  <header style={styles.header}>
-    
-  </header>
-);
+const Footer = () => {
+  return (
+    <footer style={styles.footer}>
+      <p>© 2025 Employee Management System. All rights reserved.</p>
+    </footer>
+  );
+};
 
-const Footer = () => (
-  <footer style={styles.footer}>
-    <p>© {new Date().getFullYear()} MyApp. All rights reserved.</p>
-  </footer>
-);
-
-function App() {
+const App = () => {
   return (
     <Router>
       <Navbar />
-      <Header />
       <main style={styles.main}>
         <Routes>
-        <Route
-    path="/"
-    element={
-      <div style={styles.fullCenterContainer}>
-        <Signup />
-      </div>
-    }
-  />
-          <Route path="/" element={<Signup />} />
+          <Route path="/add-employee" element={<AddEmployee />} />
+          <Route path="/employees" element={<ViewEmployees />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>
@@ -53,7 +45,7 @@ function App() {
       <Footer />
     </Router>
   );
-}
+};
 
 const styles = {
   navbar: {
@@ -81,20 +73,16 @@ const styles = {
     fontWeight: "bold",
     textDecoration: "none",
   },
-  header: {
-  padding: "10px", 
-  backgroundColor: "#f0f0f0",
-  textAlign: "center",
-},
-footer: {
-  padding: "10px", 
-  backgroundColor: "#282c34",
-  color: "white",
-  textAlign: "center",
-  fontSize: "14px",
-},
   main: {
     padding: "20px",
+    minHeight: "80vh",
+  },
+  footer: {
+    backgroundColor: "#282c34",
+    color: "white",
+    textAlign: "center",
+    padding: "15px",
+    marginTop: "auto",
   },
 };
 

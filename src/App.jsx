@@ -5,18 +5,39 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import AddEmployee from "./components/AddEmployee";
 import ViewEmployees from "./components/ViewEmployees";
+import Todo from "./components/ToDo";
+
+const getUserRole = () => {
+  return localStorage.getItem("role");
+};
 
 const Navbar = () => {
+  const role = getUserRole();
+
   return (
     <nav style={styles.navbar}>
       <div style={styles.navLeft}>
         <h2>Employee Management System</h2>
       </div>
       <div style={styles.navRight}>
-        <Link to="/add-employee" style={styles.navButton}>Add Employee</Link>
-        <Link to="/employees" style={styles.navButton}>View Employees</Link>
-        <Link to="/login" style={styles.navButton}>Login</Link>
-        <Link to="/register" style={styles.navButton}>Register</Link>
+        {role === "admin" && (
+          <>
+            <Link to="/add-employee" style={styles.navButton}>Add Employee</Link>
+            <Link to="/employees" style={styles.navButton}>View Employees</Link>
+          </>
+        )}
+        {role === "user" && (
+          <>
+            <Link to="/employees" style={styles.navButton}>Employees</Link>
+            <Link to="/todo" style={styles.navButton}>ToDo</Link>
+          </>
+        )}
+        {!role && (
+          <>
+            <Link to="/login" style={styles.navButton}>Login</Link>
+            <Link to="/register" style={styles.navButton}>Register</Link>
+          </>
+        )}
       </div>
     </nav>
   );
@@ -31,21 +52,40 @@ const Footer = () => {
 };
 
 const App = () => {
+  const role = getUserRole();
+
   return (
     <Router>
       <Navbar />
       <main style={styles.main}>
         <Routes>
-          <Route path="/add-employee" element={<AddEmployee />} />
-          <Route path="/employees" element={<ViewEmployees />} />
-          <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          <Route path="/add-employee" element={
+            role === "admin" ? <AddEmployee /> : <Unauthorized />
+          } />
+          <Route path="/employees" element={
+            role === "admin" ? <ViewEmployees editable={true} />
+              : role === "user" ? <ViewEmployees editable={false} />
+              : <Unauthorized />
+          } />
+          <Route path="/todo" element={
+            role === "user" ? <Todo /> : <Unauthorized />
+          } />
         </Routes>
       </main>
       <Footer />
     </Router>
   );
 };
+
+// Optional fallback component for unauthorized routes
+const Unauthorized = () => (
+  <div style={{ padding: "20px", color: "red", fontWeight: "bold" }}>
+    Unauthorized Access
+  </div>
+);
 
 const styles = {
   navbar: {

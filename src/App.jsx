@@ -80,7 +80,6 @@ const App = () => {
   );
 };
 
-// Optional fallback component for unauthorized routes
 const Unauthorized = () => (
   <div style={{ padding: "20px", color: "red", fontWeight: "bold" }}>
     Unauthorized Access

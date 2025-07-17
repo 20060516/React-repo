@@ -35,7 +35,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8080/api/auth/register', {
+      await axios.post('https://springboot-mlyo.onrender.com/api/auth/register', {
         ...formData,
         empId: Number(formData.empId),  // Ensure empId is sent as a number
       });

@@ -19,7 +19,7 @@ const AddEmployee = () => {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      await axios.post("http://localhost:8080/employee", {
+      await axios.post("https://springboot-mlyo.onrender.com/employee", {
         empId: parseInt(form.empId),
         name: form.name,
         email: form.email,

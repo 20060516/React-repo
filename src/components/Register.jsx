@@ -10,8 +10,6 @@ const Register = () => {
     userName: '',
     roleNames: [],
   });
-
-  // Handle simple input fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -19,8 +17,6 @@ const Register = () => {
       [name]: value
     }));
   };
-
-  // Handle comma-separated roles input
   const handleRolesChange = (e) => {
     const roles = e.target.value
       .split(',')
@@ -37,10 +33,9 @@ const Register = () => {
     try {
       await axios.post('https://springboot-mlyo.onrender.com/api/auth/register', {
         ...formData,
-        empId: Number(formData.empId),  // Ensure empId is sent as a number
+        empId: Number(formData.empId),
       });
       alert('Registered Successfully!');
-      // Optionally clear form
       setFormData({
         empId: '',
         name: '',
